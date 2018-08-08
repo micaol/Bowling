@@ -6,7 +6,6 @@ namespace Bowling.Tests
 {
     public class BowlingUnitTest
     {
-        private readonly ValuesController _myController;
 
         public BowlingUnitTest()
         {
