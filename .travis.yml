@@ -2,5 +2,6 @@ language: csharp
 mono: none
 dotnet: 2.1.300
 script:
+ - cd Bowling.Tests
  - dotnet restore
- - dotnet build
+ - dotnet test
