@@ -6,7 +6,6 @@ namespace Bowling.Tests
 {
     public class BowlingUnitTest
     {
-
         public BowlingUnitTest()
         {
         }
