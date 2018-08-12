@@ -10,13 +10,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Bowling
 {
+    /// <summary>
+    ///     Main class of the program. 
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        ///     Main function to launch the program.
+        /// </summary>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        ///     Create a Web host. 
+        /// </summary>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
