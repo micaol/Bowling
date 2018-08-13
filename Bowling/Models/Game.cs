@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace Bowling.Models
 {
@@ -26,6 +24,17 @@ namespace Bowling.Models
             for(int i = 0; i< Frame.N_FRAME ; i++)
             {
                 this.frames.Add(new Frame(i+1)); 
+            }
+        }
+
+        /// <summary>
+        ///     Create a new instance of a game from a list of pins knocked.
+        /// </summary>
+        public Game(List<int> rolls) : base()
+        {
+            foreach(int pinsKnocked in rolls)
+            {
+                this.PinsKnocked(pinsKnocked); 
             }
         }
 

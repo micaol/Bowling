@@ -6,6 +6,9 @@ namespace Bowling.Tests.Models
 {
     public class UnitTestFrame
     {
+        /// <summary>
+        ///     Check that the frame is a strike when all the 10 pins are knocked down.
+        /// </summary>
         [Fact]
         public void TestIsStrike()
         {
@@ -18,6 +21,9 @@ namespace Bowling.Tests.Models
             Assert.False(frame.IsStrike());    
         }
 
+        /// <summary>
+        ///     Check that a frame is a spare when all the 10 pins are knocked down on the second roll ONLY.
+        /// </summary>
         [Fact]
         public void TestIsSpare()
         {
