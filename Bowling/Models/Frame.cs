@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 namespace Bowling.Models
 {
@@ -13,6 +14,11 @@ namespace Bowling.Models
         ///     Number of pins on the game.
         /// </summary>
         public const int MAX_PINS = 10;  
+
+        /// <summary>
+        ///     Number of frames for a Game.
+        /// </summary>
+        public const int N_FRAME = 10; 
 
         /// <summary>
         ///     Number of the frame. There is a maximum of 10 frames
@@ -31,7 +37,7 @@ namespace Bowling.Models
         ///     It's initialised to -1.
         ///     The value can't be set if the frame is a strike.
         /// </summary>
-        private int pinsDownSecondRoll; 
+        private int pinsDownSecondRoll;
 
 
         /// <summary>
@@ -42,22 +48,71 @@ namespace Bowling.Models
         private int pinsDownThirdRoll; 
 
         /// <summary>
+        ///     True when all the rolls of this frame have been played.
+        ///     - If it's a strike or, 
+        ///     - If the second roll has been played.!-- 
+        ///     Except for the last frame: 
+        ///     - In case of a strike or a spare, the last frame will have a third roll.
+        /// </summary>
+        private bool isFrameOver; 
+
+        /// <summary>
         ///     Set the pins knocked down on the first roll. 
         /// </summary>
         /// <value> Number of pins knocked on the first roll. </value>
-        public int PinsDownFirstRoll { set {this.pinsDownFirstRoll = value; } get { return this.pinsDownFirstRoll; }}
+        public int PinsDownFirstRoll 
+        { 
+            set 
+            {   
+                this.pinsDownFirstRoll = value;
+                if(this.IsStrike() && this.frameNumber != N_FRAME)
+                {
+                    this.isFrameOver = true; 
+                } 
+            } 
+            get { return this.pinsDownFirstRoll; }
+        }
 
         /// <summary>
         ///     Set the pins knocked down on the second roll. 
         /// </summary>
         /// <value> Number of pins knocked on the second roll. </value>
-        public int PinsDownSecondRoll { set {this.pinsDownSecondRoll = value; } get { return this.pinsDownSecondRoll; }}
+        public int PinsDownSecondRoll 
+        { 
+            set 
+            {
+                this.pinsDownSecondRoll = value; 
+                if((this.IsSpare() || this.IsStrike()) && frameNumber == N_FRAME)
+                {
+                    this.isFrameOver = false; 
+                } 
+                else
+                {
+                    this.isFrameOver = true; 
+                }
+            } 
+            get { return this.pinsDownSecondRoll; }
+        }
 
         /// <summary>
         ///     Set the pins knocked down on the third roll. 
         /// </summary>
         /// <value> Number of pins knocked on the third roll. </value>
-        public int PinsDownThirdRoll { set {this.pinsDownThirdRoll = value; } get { return this.pinsDownThirdRoll; } }
+        public int PinsDownThirdRoll 
+        { 
+            set 
+            {
+                this.pinsDownThirdRoll = value; 
+                this.isFrameOver = true; 
+            } 
+            get { return this.pinsDownThirdRoll; } 
+        }
+
+        /// <summary>
+        ///     Return true if the frame is over. 
+        ///     There is no more roll to be played. 
+        /// </summary>
+        public bool IsFrameOver{ get {return this.isFrameOver; } }
 
         /// <summary>
         ///     Initialised the rolls to -1. 
@@ -68,6 +123,7 @@ namespace Bowling.Models
             this.pinsDownFirstRoll = -1;  
             this.pinsDownSecondRoll = -1; 
             this.pinsDownThirdRoll = -1; 
+            this.isFrameOver = false; 
         }
 
         /// <summary>
