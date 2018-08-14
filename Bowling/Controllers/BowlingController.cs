@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Bowling.Models;
 using Bowling.Tools;
+using System.Net;
 
 namespace Bowling.Controllers
 {
@@ -15,7 +16,7 @@ namespace Bowling.Controllers
     [ApiController]
     public class BowlingController : ControllerBase
     {
-
+        #region APICall
         /// <summary>
         ///     Initialise a new 10 pins bowling game. 
         ///     API Call: 
@@ -23,9 +24,10 @@ namespace Bowling.Controllers
         /// </summary>
         [HttpPost]
         [ActionName("start")]
-        public void Start()
+        public ActionResult Start()
         {
             DbFileController.StartDB();
+            return Ok("Game started"); 
         }
 
         /// <summary>
@@ -36,18 +38,10 @@ namespace Bowling.Controllers
         /// <param name="nPinsKnocked"> Number of pins knocked.</param>
         [HttpPost("{nPinsKnocked}")]
         [ActionName("play")]
-        public void Play(int nPinsKnocked)
+        public ActionResult Play(int nPinsKnocked)
         {
-            if(!System.IO.File.Exists(DbFileController.filePath))
-            {
-                throw new ApplicationException(ErrorMessage.GAME_NOT_STARTED); 
-            }
-
-            // Check if the model is consistant before saving.
-            // Will throw an exception if not.  
-            this.tryUpdateModel(nPinsKnocked); 
-
-            DbFileController.Save(nPinsKnocked); 
+            this.playController(nPinsKnocked); 
+            return Ok(nPinsKnocked); 
         }
 
         /// <summary>
@@ -62,11 +56,31 @@ namespace Bowling.Controllers
         [ActionName("scores")]
         public ActionResult<APIGameResults> Scores()
         {
+            return this.scoresController(); 
+        }
+
+        #endregion APICall
+
+        private ActionResult<APIGameResults> scoresController()
+        {
             string scoreString = DbFileController.Load(); 
             List<int> rolls = Tools.Parser.GetIntegers(scoreString); 
             Game game = new Game(rolls); 
             var apiResults = new APIGameResults(game.GetFramesScore().ToArray()); 
             return apiResults;
+        }
+
+        private void playController(int nPinsKnocked)
+        {
+            if(!System.IO.File.Exists(DbFileController.filePath))
+            {
+                throw new ApplicationException(ErrorMessage.GAME_NOT_STARTED); 
+            }
+
+            // Check if the model is consistant before saving.
+            this.tryUpdateModel(nPinsKnocked); 
+
+            DbFileController.Save(nPinsKnocked); 
         }
 
         /// <summary>
