@@ -67,3 +67,7 @@ Note the below limitations:
 
 2. The test are running automatically (continuous integration testing) with TravisCI at every commit.    
 https://travis-ci.org/micaol/bowling
+
+# Demo
+
+![alt text](https://github.com/micaol/bowling/blob/master/demo.png)  
