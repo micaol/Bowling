@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Bowling.Models;
+using Bowling.Tools;
 
 namespace Bowling.Controllers
 {
@@ -24,7 +25,7 @@ namespace Bowling.Controllers
         [ActionName("start")]
         public void Start()
         {
-            DbFileController.ClearDB(); 
+            DbFileController.StartDB();
         }
 
         /// <summary>
@@ -37,6 +38,15 @@ namespace Bowling.Controllers
         [ActionName("play")]
         public void Play(int nPinsKnocked)
         {
+            if(!System.IO.File.Exists(DbFileController.filePath))
+            {
+                throw new ApplicationException(ErrorMessage.GAME_NOT_STARTED); 
+            }
+
+            // Check if the model is consistant before saving.
+            // Will throw an exception if not.  
+            this.tryUpdateModel(nPinsKnocked); 
+
             DbFileController.Save(nPinsKnocked); 
         }
 
@@ -57,6 +67,19 @@ namespace Bowling.Controllers
             Game game = new Game(rolls); 
             var apiResults = new APIGameResults(game.GetFramesScore().ToArray()); 
             return apiResults;
+        }
+
+        /// <summary>
+        ///     Before the update in DB, check it the data is consistant.
+        /// </summary>
+        /// <param name="nPins"> Number of pins knocked. </param>
+        private void tryUpdateModel(int nPins)
+        {
+            string scoreString = DbFileController.Load(); 
+            List<int> rolls = Tools.Parser.GetIntegers(scoreString); 
+            Game game = new Game(rolls);
+            // Throw an exception if the model is invalid.  
+            game.PinsKnocked(nPins); 
         }
     }
 }

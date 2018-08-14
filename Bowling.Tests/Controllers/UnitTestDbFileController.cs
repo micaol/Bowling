@@ -15,7 +15,8 @@ namespace Bowling.Tests.Controllers
         [Fact]
         public void TestSaveLoad()
         {
-            DbFileController.ClearDB(); 
+            DbFileController.StartDB();  
+            
             string savedData = "2 3 10 0 5 "; 
             DbFileController.Save(2);
             DbFileController.Save(3);

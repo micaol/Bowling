@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using Bowling.Tools;
 
 namespace Bowling.Controllers
 {
@@ -53,6 +54,10 @@ namespace Bowling.Controllers
             {
                 return File.ReadAllText(filePath);
             }
+            catch(FileNotFoundException)
+            {
+                throw new ApplicationException(ErrorMessage.GAME_NOT_STARTED); 
+            }
             catch(Exception)
             {
                 // Retry strategy, up to ten times (0.5s) 
@@ -73,11 +78,12 @@ namespace Bowling.Controllers
         ///     Remove the file from the disk.
         /// </summary>
         /// <param name="tries"> Number of reamaining tries in case of failure. </param>
-        public static void ClearDB(int tries = 10)
+        public static void StartDB(int tries = 10)
         {
             try
             {
                 File.Delete(filePath);
+                File.AppendAllText(filePath,"");
             }
             catch(Exception)
             {
@@ -85,7 +91,7 @@ namespace Bowling.Controllers
                 Thread.Sleep(50); 
                 if(tries > 0)
                 {
-                    ClearDB(tries-1); 
+                    StartDB(tries-1); 
                 }
                 else
                 {

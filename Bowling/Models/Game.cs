@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Bowling.Tools;
 
 namespace Bowling.Models
 {
@@ -46,7 +47,7 @@ namespace Bowling.Models
         {
             if(nPins < 0 || nPins > 10)
             {
-                throw new System.Exception("The number of pins should be between 0 and 10. \n You inputed: " + nPins); 
+                throw new System.ArgumentOutOfRangeException("The number of pins should be between 0 and 10. \n You inputed: " + nPins); 
             }
             bool isGameOver = true; 
             foreach(Frame frame in this.frames)
@@ -60,7 +61,7 @@ namespace Bowling.Models
             }
             if(isGameOver)
             {
-                throw new System.Exception("The game is over. Please restart a new game. "); 
+                throw new ApplicationException(ErrorMessage.GAME_IS_OVER); 
             }
         }
 
@@ -77,7 +78,14 @@ namespace Bowling.Models
             } 
             else if(frame.PinsDownSecondRoll == -1)
             {
-                frame.PinsDownSecondRoll = nPins; 
+                if(frame.IsStrike() || frame.PinsDownFirstRoll + nPins <= 10)
+                {
+                    frame.PinsDownSecondRoll = nPins; 
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("The sum of the pins knocked on the first and second roll, should not exceed 10. You inputed (" + frame.PinsDownFirstRoll +" + "+nPins+")"); 
+                }
             } 
             else if(frame.PinsDownThirdRoll == -1)
             {
