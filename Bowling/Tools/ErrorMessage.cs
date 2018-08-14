@@ -11,7 +11,7 @@ namespace Bowling.Tools
         /// <summary>
         ///     The game did not start.
         /// </summary>
-        public const string GAME_NOT_STARTED = "The game was not started."; 
+        public const string GAME_NOT_STARTED = "The game did not start. Please start a new game (api/controller/start)."; 
         /// <summary>
         ///     The game is over.
         /// </summary>
