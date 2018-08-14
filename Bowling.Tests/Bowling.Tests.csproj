@@ -17,8 +17,6 @@
     <ProjectReference Include="..\Bowling\Bowling.csproj" />
   </ItemGroup>
 
-  <Content Include=".\xunit.runner.json">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
+  <ItemGroup><None Include="xunit.runner.json" CopyToOutputDirectory="Always" /></ItemGroup>
 
 </Project>
