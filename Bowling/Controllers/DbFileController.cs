@@ -35,10 +35,6 @@ namespace Bowling.Controllers
                 {
                     Save(data, tries - 1);  
                 }
-                else
-                {
-                    Console.Out.WriteLine("FAIL to save data to file: " + data);
-                }
             }
         }
 
@@ -66,10 +62,6 @@ namespace Bowling.Controllers
                 {
                     return Load(tries - 1);  
                 }
-                else
-                {
-                    Console.Out.WriteLine("FAIL to load data from file. ");
-                }
             }
             return "";
         }
@@ -92,10 +84,6 @@ namespace Bowling.Controllers
                 if(tries > 0)
                 {
                     StartDB(tries-1); 
-                }
-                else
-                {
-                    Console.Out.WriteLine("FAIL to clear file from disk. ");
                 }
             }
         }
