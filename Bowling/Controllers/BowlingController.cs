@@ -10,42 +10,53 @@ namespace Bowling.Controllers
     /// <summary>
     ///     Controller for the Bowling API.
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class BowlingController : ControllerBase
     {
 
         /// <summary>
         ///     Initialise a new 10 pins bowling game. 
+        ///     API Call: 
+        ///         api/bowling/start
         /// </summary>
-        /// <returns> Id of the new Game. </returns>
-        [HttpGet]
-        public ActionResult<int> StartNewGame()
+        [HttpPost]
+        [ActionName("start")]
+        public void Start()
         {
-            return 0;
+            DbFileController.ClearDB(); 
         }
 
         /// <summary>
-        ///     Get the score of each of the frame and the score of the game. 
+        ///     Set the number of pins knocked for the last roll. 
+        ///     API Call: 
+        ///         api/bowling/play/5
         /// </summary>
-        /// <param name="Id"> Id of the game</param>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult<int[]> GetScores(int Id)
-        {
-            var scores = new List<int>().ToArray(); 
-            return scores;
-        }
-
-        /// <summary>
-    ///         Set the number of pins knocked for the last roll. 
-        /// </summary>
-        /// <param name="id"> Id of the game. </param>
         /// <param name="nPinsKnocked"> Number of pins knocked.</param>
-        [HttpPut("{id}")]
-        public void Put(int id, int nPinsKnocked)
+        [HttpPost("{nPinsKnocked}")]
+        [ActionName("play")]
+        public void Play(int nPinsKnocked)
         {
+            DbFileController.Save(nPinsKnocked); 
+        }
 
+        /// <summary>
+        ///     Get the score of each of the frame.
+        ///       
+        /// </summary>
+        /// <returns>
+        ///     The score of each of the frame. 
+        ///     -1 if the score of the frame can not be computed yet.
+        /// </returns>
+        [HttpGet]
+        [ActionName("scores")]
+        public ActionResult<APIGameResults> Scores()
+        {
+            string scoreString = DbFileController.Load(); 
+            List<int> rolls = Tools.Parser.GetIntegers(scoreString); 
+            Game game = new Game(rolls); 
+            var apiResults = new APIGameResults(game.GetFramesScore().ToArray()); 
+            return apiResults;
         }
     }
 }

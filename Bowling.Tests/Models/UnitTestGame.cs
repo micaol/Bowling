@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using Bowling.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bowling.Tests.Models
 {
@@ -109,5 +110,20 @@ namespace Bowling.Tests.Models
             
             Assert.True(game.Score(10) == 15);
         }
+
+        /// <summary>
+        ///     Check the results of an entire game played.
+        /// </summary>
+        [Fact]
+        public void TestFrameScore()
+        {
+            int[] enteredFrames = {1,1,2,2,3,3,4,4,5,5,4,6,3,7,2,8,1,9,10,0,10};
+            int[] results ={2,6,12,20,34,47,59,70,90,110};  
+            var list = new List<int>(); 
+            list.AddRange(enteredFrames); 
+            Game game = new Game(list); 
+            Assert.True(game.GetFramesScore().ToArray().SequenceEqual(results)); 
+        }
+
     }
 }

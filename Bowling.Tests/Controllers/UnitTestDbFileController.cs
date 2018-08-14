@@ -15,15 +15,14 @@ namespace Bowling.Tests.Controllers
         [Fact]
         public void TestSaveLoad()
         {
-            var dbController = new DbFileController();
-            dbController.ClearDB(); 
+            DbFileController.ClearDB(); 
             string savedData = "2 3 10 0 5 "; 
-            dbController.Save("2");
-            dbController.Save("3");
-            dbController.Save("10");
-            dbController.Save("0");
-            dbController.Save("5");
-            string loadedData = dbController.Load(); 
+            DbFileController.Save(2);
+            DbFileController.Save(3);
+            DbFileController.Save(10);
+            DbFileController.Save(0);
+            DbFileController.Save(5);
+            string loadedData = DbFileController.Load(); 
 
             Assert.True(savedData == loadedData); 
         }

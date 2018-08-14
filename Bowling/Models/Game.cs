@@ -30,7 +30,7 @@ namespace Bowling.Models
         /// <summary>
         ///     Create a new instance of a game from a list of pins knocked.
         /// </summary>
-        public Game(List<int> rolls) : base()
+        public Game(List<int> rolls) : this()
         {
             foreach(int pinsKnocked in rolls)
             {
@@ -53,7 +53,7 @@ namespace Bowling.Models
             {
                 if(!frame.IsFrameOver)
                 {
-                    this.SetKnockedPins(frame, nPins); 
+                    this.setKnockedPins(frame, nPins); 
                     isGameOver = false; 
                     break; 
                 }
@@ -69,7 +69,7 @@ namespace Bowling.Models
         /// </summary>
         /// <param name="nPins"> Number of pins knocked. </param>
         /// <param name="frame"> Current frame being played. </param>
-        public void SetKnockedPins(Frame frame, int nPins)
+        private void setKnockedPins(Frame frame, int nPins)
         {
             if(frame.PinsDownFirstRoll == -1)
             {
@@ -200,6 +200,20 @@ namespace Bowling.Models
                 return frame.PinsDownFirstRoll + frame.PinsDownSecondRoll + frame.PinsDownThirdRoll; 
             }
             return frame.PinsDownFirstRoll + frame.PinsDownSecondRoll; 
+        }
+
+        /// <summary>
+        ///     Get the results of all the frame of the game. 
+        /// </summary>
+        /// <returns> Score of the 10 frames of the game. </returns>
+        public List<int> GetFramesScore()
+        {
+            var results = new List<int>(); 
+            for( int i = 0; i < 10; i++)
+            {
+                results.Add(this.Score(i+1)); 
+            }
+            return results; 
         }
     }
 }
